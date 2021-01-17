@@ -40,7 +40,8 @@ class GenericAlgorithm:
         print('Evaluated {} individuals'.format(len(pop)))
 
         for generation in range(n_generation):
-            print('-- Generation {} --'.format(generation+1))
+            if generation % 10 == 0:
+                print('-- Generation {} --'.format(generation+1))
 
             # Mate
             for child1, child2 in zip(pop[::2], pop[1::2]):
