@@ -4,27 +4,45 @@ import pandas as pd
 
 
 @dataclass
-class Config:
-    init_df: pd.DataFrame = None
-    nhot: list = field(default_factory=list)
-    func: list = field(default_factory=list)
+class NhotConfig:
+    n: int
+    cols: list
+    value: float
 
 
 @dataclass
-class NhotConfig:
-    n: int = 0
-    cols: list = field(default_factory=list)
+class LimConfig:
+    lower: list
+    upper: list
 
 
-class SetConfig:
-    def __init__(self, df):
-        self.config = Config()
-        self.df = df
+@dataclass
+class Config:
+    init_df: pd.DataFrame = None
+    lim: LimConfig = None
+    nhot: list = field(default_factory=list)
+    func: list = field(default_factory=list)
+    weight: tuple = field(default_factory=tuple)
 
-    def set_nhot(self, cols, n):
-        nhotconfig = NhotConfig(n=n, cols=cols)
-        self.config.nhot.append(nhotconfig)
+    @property
+    def cols(self):
+        return list(self.init_df.columns)
 
-    def set_func(self, funcs):
-        for func in funcs:
-            self.config.func.append(func)
+    @property
+    def lims_lower(self):
+        return self.lim.lower
+
+    @property
+    def lims_upper(self):
+        return self.lim.upper
+
+    @property
+    def nhot_index(self):
+        indice_list = []
+        for nhot in self.nhot:
+            indice = []
+            for col in nhot.cols:
+                index = self.cols.index(col)
+                indice.append(index)
+            indice_list.append(indice)
+        return indice_list
