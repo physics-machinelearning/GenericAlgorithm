@@ -24,6 +24,13 @@ class TestOptimization:
     def test_limit_constraint(self):
         results = self.ga.run(100, 100, 0.5, 0.2)
         for result in results:
-            for low, value in zip(self.lower, result):
+            for low, up, value in zip(self.lower, self.upper, result):
                 assert value >= low
-                
+                assert value <= up
+
+    def test_nhot_constraint(self):
+        results = self.ga.run(100, 100, 0.5, 0.2)
+        for result in results:
+            assert sum([result[0], result[2], result[4]]) == 1
+            assert sum([True if result[i] == 1
+                        else False for i in [0, 2, 4]]) == 1
