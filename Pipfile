@@ -7,6 +7,9 @@ name = "pypi"
 pandas = "*"
 deap = "*"
 numpy = "*"
+jupyter = "*"
+ipykernel = "*"
+matplotlib = "*"
 
 [dev-packages]
 flake8 = "*"
