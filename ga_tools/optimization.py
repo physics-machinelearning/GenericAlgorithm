@@ -4,7 +4,7 @@ from functools import partial
 import numpy as np
 from deap import creator, base, tools
 
-from config import Config, NhotConfig, LimConfig
+from .config import Config, NhotConfig, LimConfig
 
 
 class GenericAlgorithm:
