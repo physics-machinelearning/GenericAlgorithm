@@ -4,7 +4,7 @@ from functools import partial
 import numpy as np
 from deap import creator, base, tools
 
-from .config import Config, NhotConfig, LimConfig
+from .config import Config, NhotConfig, LimConfig, DiscreteConfig, TotalConfig
 
 
 class GenericAlgorithm:
@@ -19,6 +19,14 @@ class GenericAlgorithm:
     def set_nhot(self, cols, n, value):
         nhotconfig = NhotConfig(n=n, cols=cols, value=value)
         self.config.nhot.append(nhotconfig)
+
+    def set_discrete(self, col, values):
+        discreteconfig = DiscreteConfig(col=col, values=values)
+        self.config.discrete.append(discreteconfig)
+    
+    def set_total(self, cols, total):
+        totalconfig = TotalConfig(cols=cols, total=total)
+        self.config.total.append(totalconfig)
 
     def set_func(self, func, weights):
         self.config.func = func

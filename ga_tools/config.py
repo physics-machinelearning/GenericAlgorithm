@@ -33,8 +33,8 @@ class Config:
     init_df: pd.DataFrame = None
     lim: LimConfig = None
     nhot: list = field(default_factory=list)
-    discrete: DiscreteConfig = None
-    total: TotalConfig = None
+    discrete: list = field(default_factory=list)
+    total: list = field(default_factory=list)
     func: list = field(default_factory=list)
     weight: tuple = field(default_factory=tuple)
 
