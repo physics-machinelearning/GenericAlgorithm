@@ -4,7 +4,7 @@ from functools import partial
 import numpy as np
 from deap import creator, base, tools
 
-from .config import Config, NhotConfig, LimConfig, DiscreteConfig, TotalConfig
+from config import Config, NhotConfig, LimConfig, DiscreteConfig, TotalConfig
 
 
 class GenericAlgorithm:
@@ -153,10 +153,21 @@ def _discrete_constraints(individuals, config):
                 del individual.fitness.values
         individuals_new.append(individual)
     return individuals_new
-    
+
 
 def _total_constraints(individuals, config):
-    pass
+    individuals_new = []
+    for individual in individuals:
+        for total in config.total:
+            cols, total = total.cols, total.total
+            indices = [list(config.init_df.columns).index(col) for col in cols]
+            if sum([individual[index] for index in indices]) != total:
+                ratio = sum([individual[index] for index in indices]) / total
+                for index in indices:
+                    individual[index] /= ratio
+                del individual.fitness.values
+        individuals_new.append(individual)
+    return individuals_new
 
 
 def _create_ind_uniform(min_boundary, max_boundary):
@@ -187,7 +198,9 @@ if __name__ == '__main__':
     lower = [0, 0, 0, 0, 0, 0]
     upper = [1, 1, 1, 1, 1, 1]
     ga.set_lim(lower, upper)
-    ga.set_nhot(['a', 'c', 'e'], 1, 1)
+    ga.set_nhot(['a', 'b', 'c'], 1, 1)
+    ga.set_discrete('a', [0, 1, 2])
+    ga.set_total(['d', 'e', 'f'], 2)
     result = ga.run(100, 100, 0.5, 0.2)
     for r in result:
         print(r)
