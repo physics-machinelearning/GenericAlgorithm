@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import List
 
 import pandas as pd
 
@@ -15,12 +16,25 @@ class LimConfig:
     lower: list
     upper: list
 
+@dataclass
+class DiscreteConfig:
+    col: str
+    values: List
+
+
+@dataclass
+class TotalConfig:
+    cols: List
+    total: float
+
 
 @dataclass
 class Config:
     init_df: pd.DataFrame = None
     lim: LimConfig = None
     nhot: list = field(default_factory=list)
+    discrete: DiscreteConfig = None
+    total: TotalConfig = None
     func: list = field(default_factory=list)
     weight: tuple = field(default_factory=tuple)
 
