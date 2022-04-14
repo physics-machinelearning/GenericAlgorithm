@@ -87,6 +87,10 @@ class GenericAlgorithm:
     def _set_constraints(self, pop):
         if self.config.nhot:
             pop = _nhot_constraints(pop, self.config)
+        if self.config.discrete:
+            pop = _discrete_constraints(pop, self.config)
+        if self.config.total:
+            pop = _total_constraints(pop, self.config)
         return pop
 
     def _initialize_pop(self, pop, toolbox):
@@ -136,6 +140,23 @@ def _nhot_constraints(individuals, config):
                 del individual.fitness.values
         individuals_new.append(individual)
     return individuals_new
+
+
+def _discrete_constraints(individuals, config):
+    individuals_new = []
+    for individual in individuals:
+        for discrete in config.discrete:
+            col, values = discrete.col, discrete.values
+            index = list(config.init_df.columns).index(col)
+            if not individual[index] in values:
+                individuals[index] = random.sample(values, 1)
+                del individual.fitness.values
+        individuals_new.append(individual)
+    return individuals_new
+    
+
+def _total_constraints(individuals, config):
+    pass
 
 
 def _create_ind_uniform(min_boundary, max_boundary):
